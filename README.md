@@ -3,6 +3,8 @@ Author: Abhijith P Kumar
 #USAGE:
 
 ###Note: Use the commands without quotes ' '
+### In the place of [NAME], give the name you want
+
 ##Docker method:
 
 1. Run '*docker build -t [NAME] .*'
