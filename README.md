@@ -1,20 +1,25 @@
+
+# GARUDA SEARCH
+
 Author: Abhijith P Kumar
 
 Made as a part of Secure Coding Challenge(Level 3) in Sainya Ranakshetram Hackathon 2021
 
-#USAGE:
+A working video of the search engine is available in the repo titled as WORKING_VIDEO.mp4
 
-###Note: Use the commands without quotes ' '
+# USAGE:
+
+### Note: Use the commands without quotes ' '
 ### In the place of [NAME], give the name you want
 
-##Docker method:
+## Docker method:
 
 1. Run '*docker build -t [NAME] .*'
 2. Run '*docker run -p 8080:8080 [NAME]*'
 3. Access the search engine by typing http://0.0.0.0:8080/
 
 
-##For users without docker:
+## For users without docker:
 
 Run the following commands in the main folder (GarudaSearch):
 
@@ -23,7 +28,7 @@ Run the following commands in the main folder (GarudaSearch):
 3. '*python3 run.py*'
 4. Access the search engine by typing http://0.0.0.0:8080/ 
 
-#NOTE:
+# NOTE:
 
 1. If you using the search engine for the first time, go to the developer options in the top right corner.
 2. Create a text file with few URLs line by line. These URLs will serve as the starting point for the crawling.
