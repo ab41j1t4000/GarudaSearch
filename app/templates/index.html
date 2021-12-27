@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Most Powerful Search Engine</title>
+    <link rel="icon" type="image/x-icon" href={{url_for('static',filename='favicon2.png')}}>
+    <style>
+        input.q {
+            border: 2px solid black;
+            width: 700px;
+            height: 30px;
+            margin-bottom: 20px;
+        }
+        input.button1{
+        background-color: black;
+        color: white;
+        border-radius: 8px;
+        font-size: 20px;
+        }
+        div#title{
+        text-align: center;
+        position: relative;
+        padding: 0 0;
+        margin: auto;
+        }
+
+        div#icon{
+            margin: auto;
+            padding: 50px 0;
+        }
+
+
+    </style>
+</head>
+<body>
+<p align="right"><a href="/developer">Developer Options</a></p>
+<div id="icon"><center><img src={{url_for('static',filename='garuda.png')}} /></center></div>
+<div id="title">
+    <h1>Garuda</h1>
+<form action="/search" method="get">
+    <input type="text" class="q" name="q" value=""><br><br>
+    <input class="button1" type="submit" value="search">
+</form>
+</div>
+</body>
+</html>

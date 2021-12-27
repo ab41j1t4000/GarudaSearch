@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Developer Options</title>
+</head>
+<body>
+<strong>Warning! This option is used to manage the crawler and search database. Proceed with caution.</strong><span style="float:right;"><a href="/">back</a></span><br><br>
+Upload the file containing the list of URLs. If you have already uploaded a file before, you can press the crawl button
+<br><br>
+<form action = "/uploader" method = "POST"
+         enctype = "multipart/form-data">
+         <input type = "file" name = "file" /><br><br>
+         <input type = "submit" value="Upload"/>
+      </form><br><br>
+<form action="/developer" method="POST">
+    Enter the depth of the search: <input name="depth"> (default value:100) <br><br>
+    <input name="crawl" type="submit" value="Crawl"> Crawl the Internet!<br><br>
+    <input name="stop" type="submit" value="Stop"> Stop Crawling<br><br>
+    <input name="purge" type="submit" value="Purge"> Purge the database<br><br>
+    <input name="check" type="submit" value="Check"> Check the number of urls crawled<br><br>
+    <font color="red">{{lines}}</font>
+</form>
+</body>
+</html>
