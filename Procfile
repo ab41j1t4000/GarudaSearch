@@ -1,1 +1,1 @@
-web: waitress-serve --port=8080 website:app
+worker: waitress-serve website:app
