@@ -51,6 +51,5 @@ To see the number of crawled URLs
 
 >python3 crawler.py --check
 
-3. Exit the docker container by typing 'exit' in the shell.
-4. Run '*python3 run.py*' and access the site by typing http://0.0.0.0:8080/
-5. Note: check the number of crawled URLs using the '--check' flag. If the number of crawled URLs is less than 50, it is recomended to run the crawler atleast once with a depth of 50.
+3. Run '*python3 run.py*' and access the site by typing http://0.0.0.0:8080/
+4. Note: check the number of crawled URLs using the '--check' flag. If the number of crawled URLs is less than 50, it is recomended to run the crawler atleast once with a depth of 50.
