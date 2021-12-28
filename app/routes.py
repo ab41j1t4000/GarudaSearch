@@ -27,12 +27,17 @@ def waf(query):
 @app.route('/search', methods=['GET'])
 def search():
     correct = ''
-    query = request.args.get('q')
+    if request.args.get('q') is not None:
+        query = request.args.get('q')
+    else:
+        query = ''
     blob = TextBlob(query)
     if blob.correct() != query:
         correct = str(blob.correct())
     if query == '':
-        return redirect(url_for(index()))
+        return render_template('index.html')
+    else:
+        pass
     try:
         t1 = time.time()
         query = query.replace(' ', '%')
