@@ -5,9 +5,8 @@ import time
 from textblob import TextBlob
 import spacy
 import re
-from app import crawler
-#import threading
 import multiprocessing
+from flask_paginate import Pagination, get_page_args
 
 nlp = spacy.load("en_core_web_md")
 
@@ -17,6 +16,9 @@ def semanticsearch(str1, str2):
     doc2 = nlp(u'%s' % str2)
     return doc1.similarity(doc2)
 
+def get_pages(data,offset=0, per_page=10):
+
+    return data[offset: offset + per_page]
 
 def waf(query):
     return re.sub('[^A-Za-z0-9.]+', ' ', query)
@@ -37,16 +39,19 @@ def search():
         conn = sqlite3.connect('database/queries.db')
         safequery = waf(query).replace(' ','%')
         stmt = '''select *
-        , (case when title like \'%'''+safequery+'''%\' then 1 else 0 end) +
-         (case when metadesc like \'%'''+safequery+'''%\' then 1 else 0 end) +
-         (case when contents like \'%'''+safequery+'''%\' then 1 else 0 end) as [priority]
+        , (case when title like \'%'''+safequery+'''%\' then 2 else -1 end) +
+         (case when metadesc like \'%'''+safequery+'''%\' then 2 else -1 end) +
+         (case when contents like \'%'''+safequery+'''%\' then 0.5 else -1 end) as [priority]
         from URLS where title like \'%'''+safequery+'''%\' or metadesc like \'%'''+safequery+'''%\' or contents 
         like \'%'''+safequery+'''%\' order by [priority] desc'''
 
         results = conn.execute(stmt).fetchall()
         conn.close()
         t2 = time.time()
-        return render_template('results.html', suggest=correct, l=len(results), results=results, title=query.replace('%', ' '), t=round(t2-t1, 2))
+        page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+        pagination_pages = get_pages(results,offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=len(results),css_framework='bootstrap4')
+        return render_template('results.html', suggest=correct, l=len(results), results=pagination_pages,page=page,per_page=per_page,pagination=pagination, title=query.replace('%', ' '), t=round(t2-t1, 2))
     except Exception as e:
         return '%s' % e
 
@@ -56,62 +61,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/developer', methods=['GET','POST'])
-def developer():
-    lines = 0
-    if request.method == 'GET':
-        return render_template('developer.html')
-    elif request.method == 'POST':
-        if 'crawl' in request.form:
-            depth = request.form['depth']
-            if depth == "" or depth is None or int(depth)!=depth:
-                depth = 100
-            unvisitedURL = [line.strip() for line in open('./app/storage/unvisitedURL.txt', 'r')]
-            visitedURL = []
-            th = multiprocessing.Process(name='crawl', target=crawler.crawl, args=(depth, unvisitedURL, visitedURL))
-            th.daemon = True 
-            th.start()
-            return render_template('developer.html')
-        elif 'purge' in request.form:
-            try:
-                conn = sqlite3.connect('database/queries.db')
-                conn.execute('delete from URLS')
-                conn.commit()
-                conn.close()
-                return render_template('developer.html')
-            except Exception as e:
-                return '%s' % e
-        elif 'stop' in request.form:
-            for process in multiprocessing.active_children():
-                if process.name == 'crawl':
-                    print('Process Found')
-                    process.kill()
-                    print('Process Closed')
-                    print(process.is_alive())
-                    process.join()
-                    print('Process Joined')
-                    break
-                    
-            return render_template('developer.html')
-        elif 'check' in request.form:
-            try:
-                conn = sqlite3.connect('database/queries.db')
-                l = len(conn.execute('select * from URLS').fetchall())
-                conn.close()
-                return render_template('developer.html',lines="URLs crawled: "+str(l))
-            except Exception as e:
-                return '%s' % e
 
-    else:
-        return 'Method Not Allowed'
-
-
-@app.route('/uploader', methods=['POST'])
-def upload_file():
-    f = request.files['file']
-    f.filename = 'unvisitedURL.txt'
-    f.save('./app/storage/'+f.filename)
-    return render_template('developer.html')
 
 
 

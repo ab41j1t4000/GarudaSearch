@@ -1,19 +1,26 @@
+#!/usr/bin/python3
 from bs4 import *
 import sqlite3
 import requests
 import re
+from threading import *
 from textblob import TextBlob
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--depth", help="specify the depth of crawl")
-parser.add_argument("--path", help="specify the path of the file containing unvisited links")
+parser.add_argument("--check", help="check the number of URLs crawled",required=False,action="store_true")
+parser.add_argument("--purge", help="delete the crawled URLs. Action is irreversible",required=False,action="store_true")
+parser.add_argument("--run", help="run the crawler",required=False,action="store_true")
+parser.add_argument("--depth", help="specify the depth of crawl",default=50)
+parser.add_argument("--path", help="specify the path of the file containing unvisited links",default='./app/storage/unvisitedURL.txt')
 args = parser.parse_args()
 
 
 def crawl(depth, unvisitedURL, visitedURL):
+    l = 0
     while len(unvisitedURL) != 0 and depth !=0:
         print(len(unvisitedURL)," urls left...")
+        print(l," urls crawled...")
         url = unvisitedURL.pop(0)
         if url in visitedURL:
             pass
@@ -43,6 +50,7 @@ def crawl(depth, unvisitedURL, visitedURL):
             content = str(list(dict.fromkeys(blob.words)))
             conn.execute("INSERT INTO URLS VALUES(?,?,?,?)", (url, title, desc, content))
             conn.commit()
+            l = len(conn.execute("SELECT * FROM URLS").fetchall())
             conn.close()
             for link in soup.find_all('form'):
                 if link['action'] != 'action':
@@ -52,7 +60,6 @@ def crawl(depth, unvisitedURL, visitedURL):
                     if re.search('http', temp) is None:
                         temp = 'https:' + temp
                     unvisitedURL.append(temp)
-                #print(unvisitedURL)
             for link in soup.find_all('a'):
                 temp = link['href']
                 if temp != '#':
@@ -69,11 +76,9 @@ def crawl(depth, unvisitedURL, visitedURL):
             pass
 
         except Exception as e:
-            print("Error: ", e)
             pass
         
         except KeyboardInterrupt:
-            print('s')
             file = open('./app/storage/unvisitedURL.txt', 'r+')
             file.truncate(0)
             file = open('./app/storage/unvisitedURL.txt', 'w')
@@ -87,11 +92,42 @@ def crawl(depth, unvisitedURL, visitedURL):
     for link in unvisitedURL:
         file.write(link + '\n')
 
+def divide(l, n):
+      
+    for i in range(0, len(l), n): 
+        yield l[i:i + n]
 
 if __name__ == '__main__':
-    if args.depth is None or args.path is None:
-        print('Specify the depth using --depth parameter')
-    else:
-        unvisitedURL = [line.strip() for line in open('./storage/'+args.path, 'r')]
-        visitedURL = []
-        crawl(args.depth,unvisitedURL,visitedURL)
+    if args.purge is False and args.run is False and args.check is False:
+        print("USAGE:")
+        print("To delete the crawled URLs: python3 crawler.py --purge")
+        print("To crawl URLs: python3 crawler.py --run --path [path to URL list] --depth [depth of crawl]")
+        print("To see the number of crawled URLs: python3 crawler.py --check")
+    if args.check is True:
+        try:
+            conn = sqlite3.connect('database/queries.db')
+            x = conn.execute('select COUNT(*) from URLS').fetchall()[0][0]
+            conn.commit()
+            conn.close()
+            print(x," URLs crawled!")
+        except Exception as e:
+            print("Error: ",e)
+    if args.purge is True:
+        try:
+            conn = sqlite3.connect('database/queries.db')
+            conn.execute('delete from URLS')
+            conn.commit()
+            conn.close()
+            print("DATABASE PURGED!")
+        except Exception as e:
+            print("Error: ",e)
+
+    if args.run is True:
+        unvisitedURL = [line.strip() for line in open(args.path, 'r')]
+        l = len(unvisitedURL)
+        dividedList = divide(unvisitedURL,l//2)
+        
+        for i in dividedList:
+            visitedURL = []
+            t = Thread(target=crawl,args=(int(args.depth),i,visitedURL))
+            t.start()

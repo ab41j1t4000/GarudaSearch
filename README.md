@@ -1,4 +1,3 @@
-
 # GARUDA SEARCH
 
 Author: Abhijith P Kumar
@@ -7,7 +6,7 @@ Made as a part of Secure Coding Challenge(Level 3) in Sainya Ranakshetram Hackat
 
 A working video of the search engine is available in the repo titled as WORKING_VIDEO.mp4
 
-# USAGE:
+# USAGE (Flask application):
 
 ### Note: Use the commands without quotes ' '
 ### In the place of [NAME], give the name you want
@@ -30,8 +29,28 @@ Run the following commands in the main folder (GarudaSearch):
 
 # NOTE:
 
-1. If you using the search engine for the first time, go to the developer options in the top right corner.
-2. Create a text file with few URLs line by line. These URLs will serve as the starting point for the crawling.
-3. Upload the file in the application.
-4. Specify the depth of the crawl and press the crawl button. You can stop the crawling in the mid process. 
-5. If you want to delete all the crawled URL then click the purge button. This action cannot be reversed and you would have to use the crawl function again to use the search engine.
+If you using the search engine for the first time:
+1. Run '*docker run -p 8080:8080 -it [NAME]* /bin/bash'
+This will launch the docker application in interactive shell mode.
+
+2. In the spawned shell, run crawler.py to crawl the internet. The crawler uses First-in-First-Out method using a queue for URL crawling.
+
+USAGE:
+To delete the crawled URLs
+
+>python3 crawler.py --purge
+
+To crawl URLs
+
+>python3 crawler.py --run --path [PATH_TO_URL_LIST] --depth [DEPTH_OF_CRAWL]
+
+default depth = 50
+default path = ./app/storage/unvisitedURL.txt
+
+To see the number of crawled URLs
+
+>python3 crawler.py --check
+
+3. Exit the docker container by typing 'exit' in the shell.
+4. Run '*python3 run.py*' and access the site by typing http://0.0.0.0:8080/
+5. Note: check the number of crawled URLs using the '--check' flag. If the number of crawled URLs is less than 50, it is recomended to run the crawler atleast once with a depth of 50.

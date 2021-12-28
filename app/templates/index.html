@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Most Powerful Search Engine</title>
+    <title>GARUDA</title>
     <link rel="icon" type="image/x-icon" href={{url_for('static',filename='favicon2.png')}}>
     <style>
         input.q {
-            border: 2px solid black;
+            border: 1px solid black;
             width: 700px;
             height: 30px;
             margin-bottom: 20px;
@@ -26,20 +26,20 @@
 
         div#icon{
             margin: auto;
-            padding: 50px 0;
+            padding: 20px 0;
         }
 
-
     </style>
+    
 </head>
 <body>
-<p align="right"><a href="/developer">Developer Options</a></p>
 <div id="icon"><center><img src={{url_for('static',filename='garuda.png')}} /></center></div>
 <div id="title">
-    <h1>Garuda</h1>
+    <h1>GARUDA</h1>
+    <h4>Your Swadeshi Search Engine</h4><br><br>
 <form action="/search" method="get">
     <input type="text" class="q" name="q" value=""><br><br>
-    <input class="button1" type="submit" value="search">
+    <input class="button1" type="submit" value="Search">
 </form>
 </div>
 </body>

@@ -24,7 +24,7 @@
         }
 
         input.q {
-            border: 2px solid black;
+            border: 1px solid black;
             width: 700px;
             height: 30px;
             margin-bottom: 20px;
@@ -35,21 +35,34 @@
         color: white;
         border-radius: 8px;
         font-size: 20px;
+        margin-left:1%;
+        height: 35px;
         }
         table{
         margin-left: 1%;
         width: 50%;
         }
 
+        #menu ul{
+  list-style: none;
+}
+#menu li{
+  display: inline;
+  padding: 20px;
+}
+a#garuda, a#garuda:hover, a#garuda:focus, a#garuda:active {
+     text-decoration: none;
+     color: inherit;
+ }
     </style>
 </head>
 <body>
 <div>
-    <p style="text-align:left;margin-left:1%"><b style="font-size:30px">Garuda</b><span style="float:right;"><a href="/developer">Developer Options</a></span></p>
+<p style="text-align:left;margin-left:1%"><b style="font-size:30px"><a id="garuda" href="/">GARUDA</a></b></p>
 
 <form action="/search" method="get">
     <input type="text" class="q" name="q" value="{{ title }}">
-    <input type="submit" class="button1" value="search">
+    <input type="submit" class="button1" value="Search">
 </form><br>
     {% if suggest %}
     Did you mean <a href="/search?q={{suggest}}">{{suggest}}?</a><br><br>
@@ -58,11 +71,15 @@
 </div>
 <br><br>
 {% for i in results %}
-<table color="red">
+<table bgcolor="#e9eef5">
     <tr><td class="url"><a href={{i[0]}}>{{i[0][0:40]}}...</a></td></tr>
     <tr><td class="title">{{i[1]}}</td></tr>
     <tr><td class="content">{{i[2]}}</td></tr>
 </table><br><br>
 {% endfor %}
+<div id="menu">
+    {{ pagination.links }}
+
+  </div>
 </body>
 </html>
