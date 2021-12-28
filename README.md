@@ -6,6 +6,8 @@ Made as a part of Secure Coding Challenge(Level 3) in Sainya Ranakshetram Hackat
 
 A working video of the search engine is available in the repo titled as WORKING_VIDEO.mp4
 
+Heroku App link: https://garudasearch.herokuapp.com/
+
 # USAGE (Flask application):
 
 ### Note: Use the commands without quotes ' '
