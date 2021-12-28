@@ -1,1 +1,1 @@
-web: waitress-serve website:app
+web: waitress-serve run:app
