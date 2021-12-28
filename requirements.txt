@@ -43,3 +43,4 @@ urllib3==1.26.7
 wasabi==0.9.0
 Werkzeug==2.0.2
 flask-paginate==2021.10.29
+waitress==2.0.0
