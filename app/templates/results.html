@@ -5,6 +5,14 @@
     <title>{{ title }}</title>
     <link rel="icon" type="image/x-icon" href={{url_for('static',filename='favicon2.png')}}>
     <style>
+        body{
+       font-family: "Poppins", sans-serif;
+       font-weight: 300
+           }
+        
+           table{
+            border: 1px solid black;
+           }
         td.content{
         font-size: 15px;
         width: 10%;
@@ -20,7 +28,7 @@
         }
 
         div {
-        margin: auto;
+        margin-left: 5%;
         }
 
         input.q {
@@ -41,6 +49,7 @@
         table{
         margin-left: 1%;
         width: 50%;
+        background-color: rgb(245, 244, 243);
         }
 
         #menu ul{
@@ -54,9 +63,12 @@ a#garuda, a#garuda:hover, a#garuda:focus, a#garuda:active {
      text-decoration: none;
      color: inherit;
  }
+
+
     </style>
 </head>
 <body>
+
 <div>
 <p style="text-align:left;margin-left:1%"><b style="font-size:30px"><a id="garuda" href="/">GARUDA</a></b></p>
 
@@ -69,9 +81,10 @@ a#garuda, a#garuda:hover, a#garuda:focus, a#garuda:active {
     {% endif %}
     {{ l }} result(s) in {{ t }} seconds
 </div>
+<div>
 <br><br>
 {% for i in results %}
-<table bgcolor="#e9eef5">
+<table>
     <tr><td class="url"><a href={{i[0]}}>{{i[0][0:40]}}...</a></td></tr>
     <tr><td class="title">{{i[1]}}</td></tr>
     <tr><td class="content">{{i[2]}}</td></tr>
@@ -81,5 +94,6 @@ a#garuda, a#garuda:hover, a#garuda:focus, a#garuda:active {
     {{ pagination.links }}
 
   </div>
+</div>
 </body>
 </html>

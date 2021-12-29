@@ -124,10 +124,13 @@ if __name__ == '__main__':
 
     if args.run is True:
         unvisitedURL = [line.strip() for line in open(args.path, 'r')]
-        l = len(unvisitedURL)
-        dividedList = divide(unvisitedURL,l//2)
+        if len(unvisitedURL)==0:
+            print('List is empty! Please specify the URL list file using --path flag or go to ./app/storage and add URLs manually in unvisitedURL.txt')
+        else:
+            l = len(unvisitedURL)
+            dividedList = divide(unvisitedURL,l//2)
         
-        for i in dividedList:
-            visitedURL = []
-            t = Thread(target=crawl,args=(int(args.depth),i,visitedURL))
-            t.start()
+            for i in dividedList:
+                visitedURL = []
+                t = Thread(target=crawl,args=(int(args.depth),i,visitedURL))
+                t.start()
