@@ -6,7 +6,7 @@ Made as a part of Secure Coding Challenge(Level 3) in Sainya Ranakshetram Hackat
 
 A working video of the search engine is available in the repo titled as WORKING_VIDEO.mp4
 
-The search engine application uses spaCy NLP library for correcting mistakes and extracting keywords from the user's search queries.
+The search engine application uses spaCy NLP library for correcting spelling mistakes and extracting important keywords from the user's search queries. To improve the search results, a full text search is implemented on a virtual table containing indexed pages.
 
 Heroku App link: https://garudasearch.herokuapp.com/
 
