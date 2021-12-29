@@ -57,15 +57,10 @@ def search():
         queryExtracted = ' '.join(queryExtracted)
         queryExtracted = queryExtracted.replace(' ', '%')
         conn = sqlite3.connect('database/queries.db')
-        safequery = waf(queryExtracted)#.replace(' ',' or ')
-        stmt = "select * from URLS_FTS where URLS_FTS match \'" + safequery + "\' order by rank"
-       # stmt = '''select *
-       # , (case when match title \''''+safequery+'''\' then 2 else -1 end) +
-       #  (case when match metadesc \''''+safequery+'''\' then 2 else -1 end) +
-       #  (case when match contents \''''+safequery+'''\' then 0.5 else -1 end) as [priority]
-       # from URLS_FTS where match title \''''+safequery+'''\' or match metadesc \''''+safequery+'''\' or match contents \''''+safequery+'''%\' order by [priority] desc'''
-
-        results = conn.execute(stmt).fetchall()
+        safequery = waf(queryExtracted)
+        stmt = "select * from URLS_FTS where URLS_FTS match ? order by rank"
+       
+        results = conn.execute(stmt,(safequery,)).fetchall()
         conn.close()
         t2 = time.time()
         page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
