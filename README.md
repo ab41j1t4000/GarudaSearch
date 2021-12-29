@@ -55,4 +55,4 @@ To see the number of crawled URLs
 
 3. Run '*python3 run.py*' and access the site by typing http://0.0.0.0:8080/
 4. Note: check the number of crawled URLs using the '--check' flag. If the number of crawled URLs is less than 50, it is recomended to run the crawler atleast once with a depth of 50.
-5. The crawler script automatically runs every midnight.
+5. The crawler python script automatically runs every midnight as a cron job.
