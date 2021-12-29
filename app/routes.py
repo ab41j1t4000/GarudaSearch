@@ -18,7 +18,7 @@ def semanticsearch(str1, str2):
 
 def keyword_extract(text):
     result = []
-    punctuation = ['?','.',',',':',';','!']
+    punctuation = ['?','.',',',':',';','!','-']
     pos_tag = ['PROPN', 'ADJ', 'NOUN'] 
     doc = nlp(text.lower()) 
     for token in doc:
@@ -40,8 +40,11 @@ def waf(query):
 @app.route('/search', methods=['GET'])
 def search():
     correct = ''
+    queryExtracted = ''
     if request.args.get('q') is not None:
         query = request.args.get('q')
+        queryExtracted = keyword_extract(query)
+        queryExtracted = ' '.join(queryExtracted)
     else:
         query = ''
     blob = TextBlob(query)
@@ -49,15 +52,17 @@ def search():
         correct = str(blob.correct())
     if query == '':
         return render_template('index.html')
+    elif queryExtracted == '':
+        queryExtracted = query
     else:
         pass
     try:
         t1 = time.time()
-        queryExtracted = keyword_extract(query)
-        queryExtracted = ' '.join(queryExtracted)
-        queryExtracted = queryExtracted.replace(' ', '%')
         conn = sqlite3.connect('database/queries.db')
         safequery = waf(queryExtracted)
+        if len(safequery)==0 or len(safequery)==1:
+            safequery = 'a'
+        print(safequery)
         stmt = "select * from URLS_FTS where URLS_FTS match ? order by rank"
        
         results = conn.execute(stmt,(safequery,)).fetchall()
