@@ -6,6 +6,8 @@ Made as a part of Secure Coding Challenge(Level 3) in Sainya Ranakshetram Hackat
 
 A working video of the search engine is available in the repo titled as WORKING_VIDEO.mp4
 
+The search engine application uses spaCy NLP library for correcting mistakes in the query.
+
 Heroku App link: https://garudasearch.herokuapp.com/
 
 # USAGE (Flask application):
