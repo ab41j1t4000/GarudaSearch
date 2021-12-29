@@ -16,6 +16,19 @@ def semanticsearch(str1, str2):
     doc2 = nlp(u'%s' % str2)
     return doc1.similarity(doc2)
 
+def keyword_extract(text):
+    result = []
+    punctuation = ['?','.',',',':',';','!']
+    pos_tag = ['PROPN', 'ADJ', 'NOUN'] 
+    doc = nlp(text.lower()) 
+    for token in doc:
+        if(token.text in nlp.Defaults.stop_words or token.text in punctuation):
+            continue
+        if(token.pos_ in pos_tag):
+            result.append(token.text)
+                
+    return result
+
 def get_pages(data,offset=0, per_page=10):
 
     return data[offset: offset + per_page]
@@ -40,9 +53,11 @@ def search():
         pass
     try:
         t1 = time.time()
-        query = query.replace(' ', '%')
+        queryExtracted = keyword_extract(query)
+        queryExtracted = ' '.join(queryExtracted)
+        queryExtracted = queryExtracted.replace(' ', '%')
         conn = sqlite3.connect('database/queries.db')
-        safequery = waf(query).replace(' ','%')
+        safequery = waf(queryExtracted).replace(' ','%')
         stmt = '''select *
         , (case when title like \'%'''+safequery+'''%\' then 2 else -1 end) +
          (case when metadesc like \'%'''+safequery+'''%\' then 2 else -1 end) +
@@ -56,7 +71,7 @@ def search():
         page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
         pagination_pages = get_pages(results,offset=offset, per_page=per_page)
         pagination = Pagination(page=page, per_page=per_page, total=len(results),css_framework='bootstrap4')
-        return render_template('results.html', suggest=correct, l=len(results), results=pagination_pages,page=page,per_page=per_page,pagination=pagination, title=query.replace('%', ' '), t=round(t2-t1, 2))
+        return render_template('results.html', suggest=correct, l=len(results), results=pagination_pages,page=page,per_page=per_page,pagination=pagination, title=query, t=round(t2-t1, 2))
     except Exception as e:
         return '%s' % e
 
