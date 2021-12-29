@@ -26,8 +26,11 @@ Run the following commands in the main folder (GarudaSearch):
 
 1. '*pip3 install -r requirements.txt*' 
 2. '*python3 -m textblob.download_corpora*'
-3. '*python3 run.py*'
-4. Access the search engine by typing http://0.0.0.0:8080/ 
+3. '*sudo cp crawlcrontab /etc/cron.d/crawlcrontab*'
+4. '*sudo chmod 0644 /etc/cron.d/crawlcrontab*'
+5. '*sudo crontab /etc/cron.d/crawlcrontab*'
+6. '*python3 run.py*'
+7. Access the search engine by typing http://0.0.0.0:8080/ 
 
 # NOTE:
 
