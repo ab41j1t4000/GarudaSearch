@@ -49,6 +49,8 @@ def crawl(depth, unvisitedURL, visitedURL):
             blob = TextBlob(soup.find('body').text)
             content = str(list(dict.fromkeys(blob.words)))
             conn.execute("INSERT INTO URLS VALUES(?,?,?,?)", (url, title, desc, content))
+            conn.execute("Insert into URLS_FTS select * from URLS WHERE NOT EXISTS(SELECT * FROM URLS_FTS)")
+            print('Table synced') 
             conn.commit()
             l = len(conn.execute("SELECT * FROM URLS").fetchall())
             conn.close()
@@ -116,6 +118,7 @@ if __name__ == '__main__':
         try:
             conn = sqlite3.connect('database/queries.db')
             conn.execute('delete from URLS')
+            conn.execute('delete from URLS_FTS')
             conn.commit()
             conn.close()
             print("DATABASE PURGED!")
